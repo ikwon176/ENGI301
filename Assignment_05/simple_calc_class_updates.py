@@ -78,8 +78,8 @@ operators = {
 def get_user_input():
     """ Will return (number, number, operator) or (None, None, None) on error"""
     try:
-        number1 = float(input("Enter the first number:  "))
-        number2 = float(input("Enter the second number: "))
+        number1 = int(input("Enter the first number: "))
+        number2 = int(input("Enter the second number: "))
         op      = input("Enter an operator (valid operators are +, -, *, /, <<, >>, %, **): ")
     
         return (number1, number2, op)
