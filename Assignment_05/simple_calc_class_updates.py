@@ -94,7 +94,12 @@ def get_user_input():
 # Main script
 # ------------------------------------------------------------------------
 
+
 if __name__ == "__main__":
+    try:
+        input = raw_input
+    except NameError:
+        pass
     while True:
         (number1, number2, op) = get_user_input()
 
