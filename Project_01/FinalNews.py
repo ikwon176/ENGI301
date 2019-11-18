@@ -79,11 +79,12 @@ for script in scripts:
         jsonStr = jsonStr.rsplit(';', 1)[0]
         jsonObj = json.loads(jsonStr)
 
-#Print the first 10 headlines
+#Print header with the url and date
 count   = 0
 header  = ('%s\nHeadlines\n%s\n' %(url, now))
 article = []
 
+#Print the top 10 headlines
 for ele, v in jsonObj['initialState'].items():
     try:
         if v['headline'][0] != '{':
