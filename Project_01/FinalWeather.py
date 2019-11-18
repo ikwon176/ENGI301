@@ -63,7 +63,7 @@ obs      = owm.weather_at_id(4699066)
 w        = obs.get_weather()
 temp     = w.get_temperature('fahrenheit')
 
-#Set up strings for displaying the daily forecasts
+#Strings for displaying the daily forecasts
 m_symbol = '\xb0' + 'F'
 curr     = ('Current Temp: ', temp['temp'], m_symbol)
 high     = ('Daily High: ', temp['temp_max'], m_symbol)
