@@ -9,6 +9,6 @@ connmanctl connect wifi_74da38de508b_526963652056697369746f72_managed_none
 cd /var/lib/cloud9/ENGI301/Project_01
 
 # Runs the code to display
-python3 FinalDisplayNewsWeather.py temppwd 
+python3 FinalDisplayNewsWeather.py <password>
 
 
