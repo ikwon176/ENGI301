@@ -57,10 +57,12 @@ Outline:
 # ------------------------------------------------------------------------------
 
 #Import necessary libraries
+import os
 import digitalio
 import board
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_rgb_display.ili9341 as ili9341
+
 
 #Define the CS, DC, and Reset pins
 cs_pin    = digitalio.DigitalInOut(board.P2_2)
@@ -76,6 +78,7 @@ spi       = board.SPI()
 # Create the display
 disp      = ili9341.ILI9341(spi, rotation=90, 
                             cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
+
 
 # ------------------------------------------------------------------------------
 # Setup Button
@@ -111,6 +114,13 @@ def setup():
     print("Setup Complete")
     
 # End def
+
+def setup_wifi():
+    os.system("connmanctl enable wifi")
+    os.system("connmanctl agent on")
+    os.system("connmanctl connect wifi_74da38de508b_526963652056697369746f72_managed_none")
+# End def
+
             
 # For displaying on the LCD Screen
 def cleanstring(string):
@@ -164,34 +174,44 @@ def NewsUpdate(News_Info, Article):
     cleanstring(all_news)
     
 def task():
+    initialize        = True
     button_press      = 0
     button_press_time = 0.0
     
     while(1):
-        # Wait for button press
-        #print("Here")
-        while(GPIO.input(BUTTON0) == 1):
-            print("Here1")
-            pass #don't do anything if 1, just keep coming back to check condition
-        
-        # Record time
-        button_press_time = time.time()
-        
-        # Wait for button release
-        while(GPIO.input(BUTTON0) == 0):
-            pass
-        
-        # If instantaneously pressed (ie less than 2)
-        if ((time.time() - button_press_time) > 2.0): #if beyond 2 seconds
-            exit() #exits out of script
-        else:
-            button_press += 1
-            print(button_press)
-            #Times the button is pressed: display news (even) or weather (odd)
-            if (button_press % 2) == 1:
-                WeatherUpdate(DL_raw, DH_raw, DC_raw)
+        try:
+            # Wait for button press
+            #print("Here")
+            while(GPIO.input(BUTTON0) == 1):
+    #            print("Here1")
+                pass #don't do anything if 1, just keep coming back to check condition
+            
+            # Record time
+            button_press_time = time.time()
+            
+            # Wait for button release
+            while(GPIO.input(BUTTON0) == 0):
+                pass
+            
+            # If instantaneously pressed (ie less than 2)
+            if ((time.time() - button_press_time) > 2.0): #if beyond 2 seconds
+                exit() #exits out of script
             else:
-                NewsUpdate(News_Info, Article)
+                button_press += 1
+    #            print(button_press)
+                #Times the button is pressed: display news (even) or weather (odd)
+                
+                # Run on the first button press to initialize the wifi
+                if initialize:
+                    setup_wifi()
+                    initialize = False
+                    
+                if (button_press % 2) == 1:
+                    WeatherUpdate(DL_raw, DH_raw, DC_raw)
+                else:
+                    NewsUpdate(News_Info, Article)
+        except:
+            pass
 
 # End def
 
@@ -200,7 +220,7 @@ def task():
 #-------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-
+    
     setup()
     try:
         task()
